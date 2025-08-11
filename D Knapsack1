@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ll long long
+constexpr int INF = 1 << 30, Mod = 1e9 + 7;
+constexpr ll LINF = 1LL << 62;
+
+ll n, w;
+ll v[105][2];
+ll dp[105][100005];
+
+void Solve() {
+    cin >> n >> w;
+    memset(dp, 0, sizeof(dp));
+
+    for (ll i = 0; i < n; i++) {
+        cin >> v[i][0] >> v[i][1];
+    }
+
+    ll ans = 0;
+    for (ll i = n - 1; i >= 0; i--) { 
+        ll cw = v[i][0], val = v[i][1];
+        for (ll j = 0; j <= w; j++) {
+            if (j < cw) {
+                dp[i][j] = dp[i + 1][j]; 
+            } else {
+                dp[i][j] = max(dp[i + 1][j], val + dp[i + 1][j - cw]); 
+            }
+            ans = max(ans, dp[i][j]);
+        }
+    }
+
+    cout << ans << endl;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
+    Solve();
+}
