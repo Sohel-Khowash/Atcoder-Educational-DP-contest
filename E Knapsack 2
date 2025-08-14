@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ll long long
+constexpr int INF = 1 << 30, Mod = 1e9 + 7;
+constexpr ll LINF = 1LL << 62;
+
+ll n, w;
+ll v[105][2];
+ll dp[105][100005];
+
+void Solve() {
+    cin >> n >> w;
+    for (ll i = 0; i <= n; i++) {
+        for (ll j = 0; j <= 100000; j++) {
+            dp[i][j] = LINF;
+        }
+    }
+
+    for (ll i = 0; i < n; i++) {
+        cin >> v[i][0] >> v[i][1];
+    }
+
+    dp[n][0] = 0;
+    ll maxi = 0;
+    for (ll i = n - 1; i >= 0; i--) { 
+        ll cw = v[i][0], val = v[i][1];
+
+        for (ll j = 0; j <= 100000; j++) {
+            if (j == 0) {
+                dp[i][j] = 0;
+            } 
+            else if (j <= val) {
+                if(dp[i+1][j]!=-1)dp[i][j]=min(dp[i][j],dp[i+1][j]);
+                dp[i][j] = min(dp[i][j],cw); 
+                // cout<<i<<' '<<j<<' '<<dp[i][j]<<' '<<w<<endl;
+            } else {
+                if(dp[i+1][j]!=-1)dp[i][j]=min(dp[i][j],dp[i+1][j]);
+                if(dp[i+1][j-val]!=-1)dp[i][j]=min(dp[i][j],cw+dp[i+1][j-val]);
+            }
+            if(dp[i][j]==LLONG_MAX){
+                dp[i][j]=-1;
+            }
+            else{
+                if(dp[i][j]<=w){
+                    maxi=max(maxi,j);
+                }
+            }
+        }
+    }
+
+    cout << maxi << endl;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
+    Solve();
+}
